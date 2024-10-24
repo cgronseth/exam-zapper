@@ -10,4 +10,3 @@ For Desktop development, run:
 
 For Android development, run:
   pnpm tauri android dev
-
