@@ -1,10 +1,16 @@
 import "./Home.css";
 
-export default function NewTest() {
+interface INewTestProps {
+  newTest: () => void
+}
+
+const NewTest: React.FC<INewTestProps> = ({ newTest }) => {
 
   return (
     <div className="area">
-      New Test Area
+      <button onClick={() => newTest()}>Create new Test</button>
     </div>
   );
 }
+
+export default NewTest;

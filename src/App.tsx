@@ -1,34 +1,44 @@
 import { useState } from "react";
-//import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
 import Home from "./home/Home";
 import Menu from "./menu/Menu";
+import { MenuItem, MenuItemType } from "./menu/MenuItem";
+import Exam from "./exams/Exam";
+import "./App.css";
 
 function App() {
-  const [menuItem, setMenuItem] = useState(0);
+  const initialMenu: MenuItem[] = [
+    { type: MenuItemType.Home, title: "Home" }
+  ];
+  const [menuItems, setMenuItems] = useState(initialMenu);
+  const [currentMenuItem, setCurrentMenuItem] = useState(initialMenu[0]);
 
-  const updateSelectedItem = (selectedItem: number) => {
-    setMenuItem(selectedItem);
-  }
+  const newTest = () => {
+    let newTestItems: MenuItem[] = menuItems;
+    newTestItems.push({
+      type: MenuItemType.NewTest,
+      title: `New test ${menuItems.length}`
+    });
+    setMenuItems(newTestItems);
+    setCurrentMenuItem(menuItems[menuItems.length - 1]);
+  };
 
   return (
     <main className="container">
-      <Menu update={updateSelectedItem} />
+      <Menu items={menuItems} current={currentMenuItem} update={setCurrentMenuItem} />
+
       {
-        menuItem === 0 &&
-        <Home />
+        currentMenuItem.type === MenuItemType.Home &&
+        <Home
+          newTest={newTest}
+        />
       }
       {
-        menuItem === 1 &&
-        <>
-          First Exam
-        </>
+        currentMenuItem.type === MenuItemType.EditTest &&
+        <Exam item={currentMenuItem} />
       }
       {
-        menuItem === 2 &&
-        <>
-          Second Exam
-        </>
+        currentMenuItem.type === MenuItemType.NewTest &&
+        <Exam item={currentMenuItem} />
       }
 
     </main>

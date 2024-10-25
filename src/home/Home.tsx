@@ -3,13 +3,19 @@ import ExistingTests from "./ExistingTests";
 import NewTest from "./NewTest";
 import RecentTests from "./RecentTests";
 
-export default function Home() {
+interface IHomeProps {
+  newTest: () => void
+}
+
+const Home: React.FC<IHomeProps> = ({ newTest }) => {
 
   return (
     <div className="home">
-     <RecentTests />
+      <RecentTests />
       <ExistingTests />
-      <NewTest />
+      <NewTest newTest={newTest} />
     </div>
   );
 }
+
+export default Home;

@@ -5,3 +5,7 @@
     margin: 10px;
 }
 
+.selectedItem {
+    border:2px solid blue;
+}
+

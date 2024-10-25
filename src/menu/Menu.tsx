@@ -1,15 +1,27 @@
 import "./Menu.css";
+import { MenuItem } from "./MenuItem";
 
 interface IMenuProps {
-    update: (arg: number) => void
+    items: MenuItem[];
+    current: MenuItem;
+    update: (menuItem: MenuItem) => void
 }
 
-const Menu: React.FC<IMenuProps> = ({ update }) => {
+const Menu: React.FC<IMenuProps> = ({ items, current, update }) => {
+    const getCurrentItemClass = (item: MenuItem): string => {
+        return item === current ? "selectedItem" : "";
+    };
+
     return (
         <div className="menu">
-            <button onClick={() => update(0)}>Home</button>
-            <button onClick={() => update(1)}>First Exam</button>
-            <button onClick={() => update(2)}>Second Exam</button>
+            {
+                items.map(item =>
+                    <button
+                        className={getCurrentItemClass(item)}
+                        onClick={() => update(item)}
+                    >{item.title}</button>
+                )
+            }
         </div>
     );
 }
