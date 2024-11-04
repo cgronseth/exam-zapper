@@ -1,10 +1,10 @@
 import "./Menu.css";
-import { MenuItem } from "./MenuItem";
+import { IMenuItem, MenuItem } from "./MenuItem";
 
 interface IMenuProps {
-    items: MenuItem[];
-    current: MenuItem;
-    update: (menuItem: MenuItem) => void
+    items: IMenuItem[];
+    current: IMenuItem;
+    update: (menuItem: IMenuItem) => void
 }
 
 const Menu: React.FC<IMenuProps> = ({ items, current, update }) => {

@@ -1,20 +1,22 @@
 import { useState } from "react";
 import Home from "./home/Home";
 import Menu from "./menu/Menu";
-import { MenuItem, MenuItemType } from "./menu/MenuItem";
-import Exam from "./exams/Exam";
+import { IMenuItem, MenuItemType } from "./menu/MenuItem";
 import "./App.css";
+import ExamView from "./exams/ExamView";
+import { Guid } from "guid-typescript";
 
 function App() {
-  const initialMenu: MenuItem[] = [
+  const initialMenu: IMenuItem[] = [
     { type: MenuItemType.Home, title: "Home" }
   ];
   const [menuItems, setMenuItems] = useState(initialMenu);
   const [currentMenuItem, setCurrentMenuItem] = useState(initialMenu[0]);
 
   const newTest = () => {
-    let newTestItems: MenuItem[] = menuItems;
+    let newTestItems: IMenuItem[] = menuItems;
     newTestItems.push({
+      examId: Guid.create(),
       type: MenuItemType.NewTest,
       title: `New test ${menuItems.length}`
     });
@@ -22,11 +24,19 @@ function App() {
     setCurrentMenuItem(menuItems[menuItems.length - 1]);
   };
 
+  const getDisplay = (mi: IMenuItem): string => {
+    if (mi.type === MenuItemType.Home) {
+      return currentMenuItem.type === MenuItemType.Home ? "block" : "none";
+    } else {
+      return mi.examId === currentMenuItem.examId ? "block" : "none";
+    }
+  };
+
   return (
     <main className="container">
       <Menu items={menuItems} current={currentMenuItem} update={setCurrentMenuItem} />
 
-      {
+      {/*       {
         currentMenuItem.type === MenuItemType.Home &&
         <Home
           newTest={newTest}
@@ -34,11 +44,31 @@ function App() {
       }
       {
         currentMenuItem.type === MenuItemType.EditTest &&
-        <Exam item={currentMenuItem} />
+        <ExamView menuItem={currentMenuItem} />
       }
       {
         currentMenuItem.type === MenuItemType.NewTest &&
-        <Exam item={currentMenuItem} />
+        <ExamView menuItem={currentMenuItem} />
+      } */}
+
+      {
+        menuItems.map(mi =>
+          <div style={{ display: getDisplay(mi) }}>
+            {
+              mi.type === MenuItemType.Home &&
+              <Home
+                newTest={newTest}
+              />
+            }
+            {
+              (mi.type === MenuItemType.NewTest ||
+                mi.type === MenuItemType.EditTest ||
+                mi.type === MenuItemType.RunTest ||
+                mi.type === MenuItemType.OpenTest) &&
+              <ExamView menuItem={mi} />
+            }
+          </div>
+        )
       }
 
     </main>
